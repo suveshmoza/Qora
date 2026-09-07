@@ -1,4 +1,8 @@
-import { Parser } from 'node-sql-parser';
+// node-sql-parser is CJS; require it for ESM compat
+import { createRequire } from 'node:module';
+
+const require = createRequire(import.meta.url);
+const { Parser } = require('node-sql-parser') as typeof import('node-sql-parser');
 
 const parser = new Parser();
 
@@ -21,8 +25,8 @@ const BLOCKED_KEYWORDS = [
 
 const FORBIDDEN_TABLES = ['pg_authid', 'pg_shadow', 'pg_roles', 'pg_user'];
 
-const DEFAULT_ROW_LIMIT = 1000;
-const MAX_ROW_LIMIT = 5000;
+export const DEFAULT_ROW_LIMIT = 1000;
+export const MAX_ROW_LIMIT = 5000;
 
 export interface ValidationResult {
   ok: boolean;
