@@ -1,14 +1,10 @@
 import { Pool } from 'pg';
 
-const DATABASE_URL = process.env.DATABASE_URL;
-
-if (!DATABASE_URL) {
-  throw new Error('DATABASE_URL env var is not set.');
-}
+import { env } from './config/env.js';
 
 export const pool = new Pool({
   max: 5,
-  connectionString: DATABASE_URL,
+  connectionString: env.DATABASE_URL,
   idleTimeoutMillis: 30000,
 });
 
