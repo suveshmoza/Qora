@@ -1,8 +1,15 @@
 {
-  "name": "scout",
+  "name": "qora",
   "version": "1.0.0",
-  "description": "",
-  "keywords": [],
+  "description": "Talk to your data.Explore and query your database safely with AI, without changing anything",
+  "keywords": [
+    "ai",
+    "ai-agent",
+    "database-agent",
+    "llm",
+    "mcp",
+    "qora"
+  ],
   "license": "ISC",
   "author": "",
   "type": "module",
@@ -11,7 +18,6 @@
     "build": "tsc",
     "start": "node --env-file=.env dist/server.js",
     "dev": "node --env-file=.env ./node_modules/tsx/dist/cli.mjs watch src/server.ts",
-    "mcp": "node --env-file=.env ./node_modules/tsx/dist/cli.mjs src/server.ts",
     "test": "echo \"Error: no test specified\" && exit 1",
     "fmt": "oxfmt",
     "fmt:check": "oxfmt --check",

@@ -14,9 +14,10 @@ import { registerRunQuery } from './tools/run-query.js';
 
 function createServer(): McpServer {
   const server = new McpServer({
-    name: 'scout',
+    name: 'qora',
     version: '0.0.1',
-    description: 'A database query assistant for PostgreSQL',
+    description:
+      'Talk to your data. Explore schemas and tables, understand structure, and get clear answers from live queries.',
   });
 
   registerListSchemas(server);
@@ -39,7 +40,7 @@ async function startStdio(): Promise<void> {
   const server = createServer();
   const transport = new StdioServerTransport();
   await server.connect(transport);
-  logger.info({ event: 'server_start', mode: 'stdio' }, 'scout MCP server running on stdio');
+  logger.info({ event: 'server_start', mode: 'stdio' }, 'qora MCP server running on stdio');
 }
 
 async function startHttp(): Promise<void> {
@@ -96,7 +97,7 @@ async function startHttp(): Promise<void> {
         port,
         url: `http://${displayHost}:${port}/mcp`,
       },
-      'scout-mcp listening (streamable-http)',
+      'qora listening (streamable-http)',
     );
     if (hostCheckOpen) {
       logger.warn(

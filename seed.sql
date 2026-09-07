@@ -74,7 +74,7 @@ FROM generate_series(1, 50) AS i;
 
 -- ---------------------------------------------------------------------------
 -- Read-only role (matches DATABASE_URL in .env.example)
--- Grants cover every seeded schema — scout will only see what this role can access.
+-- Grants cover every seeded schema — Qora will only see what this role can access.
 -- ---------------------------------------------------------------------------
 DO $$
 BEGIN

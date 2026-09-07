@@ -4,10 +4,10 @@ import { env } from './config/env.js';
 
 export const logger = pino(
   {
-    name: 'scout',
+    name: 'qora',
     level: env.LOG_LEVEL,
     base: {
-      service: 'scout',
+      service: 'qora',
       env: env.NODE_ENV,
       transport: env.TRANSPORT,
     },
