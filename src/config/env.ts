@@ -73,16 +73,15 @@ const envSchema = z
 
 export type Env = z.infer<typeof envSchema>;
 
-function loadEnv(): Env {
-  const result = envSchema.safeParse(process.env);
+export function loadEnv(source: NodeJS.ProcessEnv = process.env): Env {
+  const result = envSchema.safeParse(source);
 
   if (!result.success) {
-    // Bootstrap only — logger cannot load until env is valid
-    console.error('Invalid environment variables:');
-    for (const issue of result.error.issues) {
-      console.error(`  ${issue.path.join('.') || 'environment'}: ${issue.message}`);
-    }
-    process.exit(1);
+    const errors = result.error.issues
+      .map((issue) => `${issue.path.join('.') || 'environment'}: ${issue.message}`)
+      .join('\n');
+
+    throw new Error(`Invalid environment variables:\n${errors}`);
   }
 
   return result.data;
