@@ -6,7 +6,7 @@ const { Parser } = require('node-sql-parser') as typeof import('node-sql-parser'
 
 const parser = new Parser();
 
-const BLOCKED_KEYWORDS = [
+export const BLOCKED_KEYWORDS = [
   'insert',
   'update',
   'delete',
@@ -21,9 +21,9 @@ const BLOCKED_KEYWORDS = [
   'call',
   'merge',
   'lock',
-];
+] as const;
 
-const FORBIDDEN_TABLES = ['pg_authid', 'pg_shadow', 'pg_roles', 'pg_user'];
+export const FORBIDDEN_TABLES = ['pg_authid', 'pg_shadow', 'pg_roles', 'pg_user'] as const;
 
 export const DEFAULT_ROW_LIMIT = 1000;
 export const MAX_ROW_LIMIT = 5000;
@@ -74,11 +74,21 @@ export function validateSql(sqlRaw: string): ValidationResult {
   return { ok: true };
 }
 
+const TRAILING_LIMIT_RE = /\bLIMIT\s+(\d+)\s*;?\s*$/i;
+
 export function enforceRowLimit(sql: string, limit = DEFAULT_ROW_LIMIT): string {
-  const lowered = sql.toLowerCase();
-  if (/\blimit\b/.test(lowered)) {
-    return sql;
+  const trimmed = sql.trim();
+  const defaultLimit = Math.min(Math.max(0, limit), MAX_ROW_LIMIT);
+  const match = TRAILING_LIMIT_RE.exec(trimmed);
+
+  if (match?.[1] !== undefined) {
+    const requested = Number(match[1]);
+    const enforced = Number.isFinite(requested)
+      ? Math.min(Math.max(0, requested), MAX_ROW_LIMIT)
+      : defaultLimit;
+    return trimmed.replace(TRAILING_LIMIT_RE, `LIMIT ${enforced};`);
   }
-  const cappedLimit = Math.min(limit, MAX_ROW_LIMIT);
-  return `${sql.trim().replace(/;+\s*$/, '')} LIMIT ${cappedLimit}`;
+
+  const withoutTrailingSemi = trimmed.replace(/;+\s*$/, '');
+  return `${withoutTrailingSemi} LIMIT ${defaultLimit};`;
 }
