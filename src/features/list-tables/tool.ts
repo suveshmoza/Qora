@@ -19,6 +19,10 @@ export function registerListTables(server: McpServer): void {
             'Optional schema name. If omitted, lists tables across all non-system schemas.',
           ),
       }),
+      annotations: {
+        title: 'List tables',
+        readOnlyHint: true,
+      },
     },
     async ({ schema }) => {
       const tables = await listTables(schema);

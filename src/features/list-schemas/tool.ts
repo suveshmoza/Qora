@@ -12,6 +12,10 @@ export function registerListSchemas(server: McpServer): void {
       description:
         'List database schemas the agent can see (system schemas excluded). Call this first to discover which schemas exist, then list_tables / describe_table.',
       inputSchema: z.object({}),
+      annotations: {
+        title: 'List schemas',
+        readOnlyHint: true,
+      },
     },
     async () => {
       const schemas = await listSchemas();

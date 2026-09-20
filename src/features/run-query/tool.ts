@@ -18,6 +18,10 @@ export function registerRunQuery(server: McpServer): void {
       inputSchema: z.object({
         sql: z.string().describe('Read-only SELECT statement to execute'),
       }),
+      annotations: {
+        title: 'Run query',
+        readOnlyHint: true,
+      },
     },
     async ({ sql }) => runQuery(sql),
   );

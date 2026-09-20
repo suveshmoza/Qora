@@ -15,6 +15,10 @@ export function registerDescribeTable(server: McpServer): void {
         schema: z.string().describe('Schema that owns the table'),
         table_name: z.string().describe('Table or view name'),
       }),
+      annotations: {
+        title: 'Describe table',
+        readOnlyHint: true,
+      },
     },
     async ({ schema, table_name }) => {
       const columns = await describeTable(schema, table_name);
