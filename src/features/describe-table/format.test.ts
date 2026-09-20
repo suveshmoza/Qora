@@ -1,7 +1,7 @@
 import { describe, expect, it } from 'vitest';
 
-import type { ColumnInfo } from './describe-table.js';
-import { formatColumns } from './format-columns.js';
+import { formatColumns } from './format.js';
+import type { ColumnInfo } from './query.js';
 
 describe('formatColumns', () => {
   it('returns a not-found message when there are no columns', () => {

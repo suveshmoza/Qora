@@ -1,8 +1,8 @@
 import type { McpServer } from '@modelcontextprotocol/sdk/server/mcp.js';
 import { z } from 'zod';
 
-import { describeTable } from '../query/describe-table.js';
-import { formatColumns } from '../query/format-columns.js';
+import { formatColumns } from './format.js';
+import { describeTable } from './query.js';
 
 export function registerDescribeTable(server: McpServer): void {
   server.registerTool(

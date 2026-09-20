@@ -1,4 +1,4 @@
-import { BLOCKED_KEYWORDS, enforceRowLimit, FORBIDDEN_TABLES, validateSql } from './validater.js';
+import { BLOCKED_KEYWORDS, enforceRowLimit, FORBIDDEN_TABLES, validateSql } from './validator.js';
 
 describe('validateSql', () => {
   it('should return an error if the query is empty', () => {

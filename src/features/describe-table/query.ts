@@ -1,4 +1,4 @@
-import { pool } from '../db.js';
+import { pool } from '../../shared/db.js';
 
 export interface ColumnInfo {
   column_name: string;

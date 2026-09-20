@@ -1,8 +1,8 @@
 import type { McpServer } from '@modelcontextprotocol/sdk/server/mcp.js';
 import { z } from 'zod';
 
-import { formatTables } from '../query/format-tables.js';
-import { listTables } from '../query/list-tables.js';
+import { formatTables } from './format.js';
+import { listTables } from './query.js';
 
 export function registerListTables(server: McpServer): void {
   server.registerTool(

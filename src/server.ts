@@ -6,11 +6,11 @@ import type { Transport } from '@modelcontextprotocol/sdk/shared/transport.js';
 import type { Request, Response } from 'express';
 
 import { env } from './config/env.js';
-import { logger } from './logger.js';
-import { registerDescribeTable } from './tools/describe-table.js';
-import { registerListSchemas } from './tools/list-schemas.js';
-import { registerListTables } from './tools/list-tables.js';
-import { registerRunQuery } from './tools/run-query.js';
+import { registerDescribeTable } from './features/describe-table/tool.js';
+import { registerListSchemas } from './features/list-schemas/tool.js';
+import { registerListTables } from './features/list-tables/tool.js';
+import { registerRunQuery } from './features/run-query/tool.js';
+import { logger } from './shared/logger.js';
 
 function createServer(): McpServer {
   const server = new McpServer({

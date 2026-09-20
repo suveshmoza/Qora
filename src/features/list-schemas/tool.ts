@@ -1,7 +1,8 @@
 import type { McpServer } from '@modelcontextprotocol/sdk/server/mcp.js';
 import { z } from 'zod';
 
-import { listSchemas } from '../query/list-schemas.js';
+import { formatSchemas } from './format.js';
+import { listSchemas } from './query.js';
 
 export function registerListSchemas(server: McpServer): void {
   server.registerTool(
@@ -14,12 +15,7 @@ export function registerListSchemas(server: McpServer): void {
     },
     async () => {
       const schemas = await listSchemas();
-      const text =
-        schemas.length === 0
-          ? 'No user schemas found.'
-          : schemas.map((schema) => `- ${schema}`).join('\n');
-
-      return { content: [{ type: 'text', text }] };
+      return { content: [{ type: 'text', text: formatSchemas(schemas) }] };
     },
   );
 }

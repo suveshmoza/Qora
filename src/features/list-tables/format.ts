@@ -1,4 +1,4 @@
-import { TableInfo } from './list-tables.js';
+import type { TableInfo } from './query.js';
 
 export function formatTables(tables: TableInfo[], schema?: string): string {
   if (tables.length === 0) {

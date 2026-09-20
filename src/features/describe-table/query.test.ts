@@ -4,11 +4,11 @@ const mocks = vi.hoisted(() => ({
   },
 }));
 
-vi.mock('../db.js', () => ({
+vi.mock('../../shared/db.js', () => ({
   pool: mocks.pool,
 }));
 
-import { describeTable } from './describe-table.js';
+import { describeTable } from './query.js';
 
 describe('describeTable', () => {
   beforeEach(() => {

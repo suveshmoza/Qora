@@ -1,7 +1,7 @@
 import type { McpServer } from '@modelcontextprotocol/sdk/server/mcp.js';
 import { z } from 'zod';
 
-import { runQuery } from '../query/run-query.js';
+import { runQuery } from './run.js';
 
 export function registerRunQuery(server: McpServer): void {
   server.registerTool(

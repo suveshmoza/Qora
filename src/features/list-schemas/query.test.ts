@@ -4,12 +4,12 @@ const mocks = vi.hoisted(() => ({
   },
 }));
 
-vi.mock('../db.js', () => ({
+vi.mock('../../shared/db.js', () => ({
   pool: mocks.pool,
 }));
 
-import { listSchemas } from '../query/list-schemas.js';
-import { SYSTEM_SCHEMAS } from '../tools/utils/system-schemas.js';
+import { SYSTEM_SCHEMAS } from '../../shared/sql/system-schemas.js';
+import { listSchemas } from './query.js';
 
 describe('listSchemas', () => {
   beforeEach(() => {

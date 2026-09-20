@@ -5,27 +5,23 @@ const mocks = vi.hoisted(() => ({
   enforceRowLimit: vi.fn(),
 }));
 
-vi.mock('../audit.js', () => ({
+vi.mock('../../shared/audit.js', () => ({
   logQuery: mocks.logQuery,
 }));
 
-vi.mock('../db.js', () => ({
+vi.mock('../../shared/db.js', () => ({
   executeQuery: mocks.executeQuery,
 }));
 
-vi.mock('../validater.js', () => ({
+vi.mock('../../shared/sql/validator.js', () => ({
   DEFAULT_ROW_LIMIT: 1000,
   validateSql: mocks.validateSql,
   enforceRowLimit: mocks.enforceRowLimit,
 }));
 
+import { runQuery } from './run.js';
+
 describe('runQuery', () => {
-  it('executes a valid query and returns formatted results', async () => {});
-});
-
-import { runQuery } from './run-query.js';
-
-describe('runQuery', async () => {
   beforeEach(() => {
     vi.clearAllMocks();
   });

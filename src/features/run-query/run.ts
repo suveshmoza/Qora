@@ -1,9 +1,9 @@
 import type { CallToolResult } from '@modelcontextprotocol/sdk/types.js';
 
-import { logQuery } from '../audit.js';
-import { executeQuery } from '../db.js';
-import { DEFAULT_ROW_LIMIT, enforceRowLimit, validateSql } from '../validater.js';
-import { formatQueryResult } from './format-result.js';
+import { logQuery } from '../../shared/audit.js';
+import { executeQuery } from '../../shared/db.js';
+import { DEFAULT_ROW_LIMIT, enforceRowLimit, validateSql } from '../../shared/sql/validator.js';
+import { formatQueryResult } from './format.js';
 
 export async function runQuery(sql: string): Promise<CallToolResult> {
   const validation = validateSql(sql);

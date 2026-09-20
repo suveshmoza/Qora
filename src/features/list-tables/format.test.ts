@@ -1,7 +1,7 @@
 import { describe, expect, it } from 'vitest';
 
-import { formatTables } from './format-tables.js';
-import type { TableInfo } from './list-tables.js';
+import { formatTables } from './format.js';
+import type { TableInfo } from './query.js';
 
 describe('formatTables', () => {
   it('returns a message when there are no tables', () => {

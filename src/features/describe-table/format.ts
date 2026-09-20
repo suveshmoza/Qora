@@ -1,4 +1,4 @@
-import type { ColumnInfo } from './describe-table.js';
+import type { ColumnInfo } from './query.js';
 
 export function formatColumns(columns: ColumnInfo[], schema: string, tableName: string): string {
   if (columns.length === 0) {

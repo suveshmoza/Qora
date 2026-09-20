@@ -1,5 +1,5 @@
-import { pool } from '../db.js';
-import { SYSTEM_SCHEMAS } from '../tools/utils/system-schemas.js';
+import { pool } from '../../shared/db.js';
+import { SYSTEM_SCHEMAS } from '../../shared/sql/system-schemas.js';
 
 export interface TableInfo {
   table_schema: string;

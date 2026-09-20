@@ -1,6 +1,6 @@
-import { formatQueryResult } from './format-result.js';
+import { formatQueryResult } from './format.js';
 
-describe('fomratQueryResult', () => {
+describe('formatQueryResult', () => {
   it('converts rows into objects', () => {
     const result = formatQueryResult(
       ['id', 'name'],

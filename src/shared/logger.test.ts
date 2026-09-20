@@ -1,6 +1,6 @@
 import { describe, expect, it, vi } from 'vitest';
 
-vi.mock('./config/env.js', () => ({
+vi.mock('../config/env.js', () => ({
   env: {
     LOG_LEVEL: 'info',
     NODE_ENV: 'test',

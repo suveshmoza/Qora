@@ -65,14 +65,16 @@ Even if an AI assistant makes a mistake, Qora is designed to prevent it from mod
 - pnpm
 - PostgreSQL
 
-Create a PostgreSQL user with read-only access and add its connection string to `.env`.
+Create a PostgreSQL user with read-only access, then copy the example env file:
 
 ```bash
 pnpm install
 cp .env.example .env
 ```
 
-Then configure:
+Before `pnpm dev` / `pnpm start`, expose the variables listed in [`.env.example`](./.env.example) in your environment (shell export, process manager, container env, or your MCP client's `env` block).
+
+At minimum you need:
 
 ```env
 DATABASE_URL=postgresql://readonly_user:password@localhost:5432/prod
@@ -89,6 +91,12 @@ psql -d prod -f seed.sql
 ```
 
 ## Start Qora
+
+Load your env file into the shell first (bash/zsh):
+
+```bash
+set -a && source .env && set +a
+```
 
 ### Local development
 
@@ -113,17 +121,20 @@ pnpm start
 
 Qora uses the **Model Context Protocol (MCP)**, an open standard that allows AI assistants to securely use external tools and data.
 
-Add Qora to your MCP configuration:
+Add Qora to your MCP configuration and pass the required variables in `env`:
 
 ```json
 {
   "mcpServers": {
     "qora": {
       "command": "node",
-      "args": ["--env-file=.env", "./node_modules/tsx/dist/cli.mjs", "src/server.ts"],
+      "args": ["./node_modules/tsx/dist/cli.mjs", "src/server.ts"],
       "cwd": "/absolute/path/to/qora",
       "env": {
-        "TRANSPORT": "stdio"
+        "TRANSPORT": "stdio",
+        "DATABASE_URL": "postgresql://readonly_user:password@localhost:5432/prod",
+        "NODE_ENV": "development",
+        "LOG_LEVEL": "info"
       }
     }
   }
@@ -136,7 +147,7 @@ Once connected, your AI assistant can use Qora to explore and query your databas
 
 Qora can also run as an HTTP-based MCP server.
 
-Start Qora:
+With env vars already loaded:
 
 ```bash
 TRANSPORT=http pnpm start
@@ -169,7 +180,7 @@ The AI can combine these tools to first understand your database and then find t
 
 ## Configuration
 
-Copy [`.env.example`](./.env.example) and configure:
+Before starting Qora, expose the variables from [`.env.example`](./.env.example). Required and optional settings:
 
 | Setting         | Description                                                  |
 | --------------- | ------------------------------------------------------------ |
