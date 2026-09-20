@@ -1,0 +1,20 @@
+{
+  "name": "Qora",
+  "dockerComposeFile": "docker-compose.yml",
+  "service": "app",
+  "workspaceFolder": "/workspace",
+  "forwardPorts": [8080, 5432],
+  "portsAttributes": {
+    "8080": { "label": "Qora MCP (HTTP)" },
+    "5432": { "label": "Postgres (sample)" }
+  },
+  "postCreateCommand": "corepack enable && corepack prepare pnpm@11.25.0 --activate && pnpm install",
+  "customizations": {
+    "vscode": {
+      "settings": {
+        "terminal.integrated.defaultProfile.linux": "bash"
+      }
+    }
+  },
+  "remoteUser": "node"
+}

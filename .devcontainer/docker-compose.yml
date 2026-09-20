@@ -1,0 +1,42 @@
+services:
+  app:
+    image: mcr.microsoft.com/devcontainers/javascript-node:1-24-bookworm
+    volumes:
+      - ..:/workspace:cached
+    working_dir: /workspace
+    command: sleep infinity
+    environment:
+      DATABASE_URL: postgresql://analyst_agent:analyst_pw@db:5432/prod
+      NODE_ENV: development
+      TRANSPORT: http
+      HOST: 0.0.0.0
+      PORT: "8080"
+      ALLOWED_HOSTS: "*"
+      LOG_LEVEL: info
+      LOG_PRETTY: "true"
+    depends_on:
+      db:
+        condition: service_healthy
+    ports:
+      - "8080:8080"
+
+  db:
+    image: postgres:16-alpine
+    environment:
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: postgres
+      POSTGRES_DB: prod
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+      - ../seed.sql:/docker-entrypoint-initdb.d/01-seed.sql:ro
+    ports:
+      - "5432:5432"
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U postgres -d prod"]
+      interval: 5s
+      timeout: 5s
+      retries: 10
+      start_period: 10s
+
+volumes:
+  postgres_data:

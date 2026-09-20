@@ -167,6 +167,61 @@ ngrok http 8080
 
 > **Important:** Don't expose your database or Qora endpoint publicly without appropriate authentication and network controls.
 
+## Run with Docker
+
+The production image runs **Qora only**. It does not start Postgres and does not load [`seed.sql`](./seed.sql) — point it at your own database.
+
+Create a `.env` (Compose reads it for substitution):
+
+```env
+DATABASE_URL=postgresql://readonly_user:password@your-db-host:5432/your_db
+NODE_ENV=production
+TRANSPORT=http
+HOST=0.0.0.0
+PORT=8080
+ALLOWED_HOSTS=localhost,127.0.0.1,your.hostname
+LOG_LEVEL=info
+```
+
+```bash
+docker compose up --build
+```
+
+MCP endpoint: `http://localhost:8080/mcp` (or your host/port).
+
+In production HTTP mode `ALLOWED_HOSTS` must be an explicit list (not `*`).
+
+```bash
+docker compose down
+```
+
+## Dev Container (local testing)
+
+For development with a **sample** database, use the Dev Container. It starts Postgres, applies [`seed.sql`](./seed.sql) once on first volume create, and mounts the repo.
+
+In Cursor / VS Code: **Dev Containers: Reopen in Container**.
+
+Or from the CLI:
+
+```bash
+docker compose -f .devcontainer/docker-compose.yml up -d
+```
+
+Inside the container:
+
+```bash
+pnpm install
+pnpm dev
+```
+
+`DATABASE_URL` is already set to the seeded `analyst_agent` role on service `db`.
+
+Reset the sample DB volume:
+
+```bash
+docker compose -f .devcontainer/docker-compose.yml down -v
+```
+
 ## What Qora gives your AI assistant
 
 | Tool             | What it does                          |

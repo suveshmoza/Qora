@@ -1,0 +1,15 @@
+# Production / self-hosted: Qora only. Point DATABASE_URL at your own Postgres.
+# Does not start a database or load seed.sql.
+services:
+  qora:
+    build: .
+    ports:
+      - "${PORT:-8080}:8080"
+    environment:
+      DATABASE_URL: ${DATABASE_URL:?Set DATABASE_URL to your read-only Postgres URL}
+      NODE_ENV: ${NODE_ENV:-production}
+      TRANSPORT: ${TRANSPORT:-http}
+      HOST: ${HOST:-0.0.0.0}
+      PORT: ${PORT:-8080}
+      ALLOWED_HOSTS: ${ALLOWED_HOSTS:?Set ALLOWED_HOSTS (comma-separated hosts; * not allowed in production HTTP)}
+      LOG_LEVEL: ${LOG_LEVEL:-info}
