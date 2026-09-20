@@ -1,4 +1,8 @@
-![qora-logo](https://iili.io/n2OKs7n.md.jpg)
+<div align="center">
+  <picture>
+    <img src="https://iili.io/n2OKs7n.md.jpg" alt="qora-logo" width="128" height="128">
+  </picture>
+</div>
 
 # Qora
 
