@@ -1,14 +1,8 @@
-<div align="center">
-  <picture>
-    <img src="https://iili.io/n2OKs7n.md.jpg" alt="qora-logo" width="128" height="128">
-  </picture>
+![qora-logo](https://iili.io/n2OKs7n.md.jpg)
 
-  <h1>Qora</h1>
-  
-  </div>
+# Qora
 
 **Talk to your data. Get clear answers, insights, and analysis.**
-
 
 Qora lets AI assistants like Cursor and Claude safely explore your database and answer questions about your data in plain English.
 
@@ -24,7 +18,7 @@ Qora looks up the answers directly from your database and gives them back to you
 
 **Qora is read-only by design.** It can inspect and query your data, but it cannot insert, update, or delete anything.
 
-[![M8ven Score](https://m8ven.ai/badge/mcp/suveshmoza-qora-11gkax)](https://m8ven.ai/mcp/suveshmoza-qora-11gkax)
+![M8ven Score](https://m8ven.ai/badge/mcp/suveshmoza-qora-11gkax)
 
 ## How it works
 
@@ -43,219 +37,32 @@ flowchart LR
 3. Qora looks up schemas/tables or runs a read-only query.
 4. Results go back to the assistant, which answers you.
 
-## What can Qora do?
+## What Qora does
 
-- **Explore your data**: See what schemas and tables are available in your database.
-- **Understand your database**: Inspect tables and their columns without opening a database client.
-- **Ask questions**: Ask things like "How many customers signed up this month?" or "What's the average order value?"
-- **Analyze your data**: Find trends, compare numbers, and understand what's happening in your business.
+Qora gives your AI assistant safe, read-only access to the database.
+
+- **Discover schemas and tables** - so the assistant knows what’s available
+- **Describe table structure** - columns, types, and nullability
+- **Run read-only SQL** - the assistant writes the query; Qora validates and executes it
+- **Return results safely** - capped row counts, no writes or schema changes
 
 ## Read-only by design
 
-There are multiple layers of protection:
+1. Only read-style queries are allowed
+2. Connect with a read-only database user
+3. Result size is capped
+4. HTTP access can be limited to specific hosts
 
-1. **Read-only queries**: Qora only allows queries that retrieve data.
-2. **Read-only database user**: Connect Qora using a database account that cannot modify data.
-3. **Result limits**: Responses are limited in size to prevent accidentally returning huge amounts of data.
-4. **Host restrictions**: Web access can be restricted to specific hosts.
+## Tools
 
-Even if an AI assistant makes a mistake, Qora is designed to prevent it from modifying your database.
+| Tool             | What it does                     |
+| ---------------- | -------------------------------- |
+| `list_schemas`   | See the main areas of your data  |
+| `list_tables`    | See what tables exist            |
+| `describe_table` | Understand what's inside a table |
+| `run_query`      | Run a validated read-only SELECT |
 
-## Getting started
+## Docs
 
-### Requirements
-
-- Node.js
-- pnpm
-- PostgreSQL
-
-Create a PostgreSQL user with read-only access, then copy the example env file:
-
-```bash
-pnpm install
-cp .env.example .env
-```
-
-Before `pnpm dev` / `pnpm start`, expose the variables listed in [`.env.example`](./.env.example) in your environment (shell export, process manager, container env, or your MCP client's `env` block).
-
-At minimum you need:
-
-```env
-DATABASE_URL=postgresql://readonly_user:password@localhost:5432/prod
-```
-
-### Try it with sample data
-
-A sample database is included in [`seed.sql`](./seed.sql).
-
-Create a database called `prod`, then load the sample data:
-
-```bash
-psql -d prod -f seed.sql
-```
-
-## Start Qora
-
-Load your env file into the shell first (bash/zsh):
-
-```bash
-set -a && source .env && set +a
-```
-
-### Local development
-
-```bash
-pnpm dev
-```
-
-### Connect directly from Cursor or Claude
-
-```bash
-TRANSPORT=stdio pnpm start
-```
-
-### Production
-
-```bash
-pnpm build
-pnpm start
-```
-
-## Connect Qora to Cursor or Claude Desktop
-
-Qora uses the **Model Context Protocol (MCP)**, an open standard that allows AI assistants to securely use external tools and data.
-
-Add Qora to your MCP configuration and pass the required variables in `env`:
-
-```json
-{
-  "mcpServers": {
-    "qora": {
-      "command": "node",
-      "args": ["./node_modules/tsx/dist/cli.mjs", "src/server.ts"],
-      "cwd": "/absolute/path/to/qora",
-      "env": {
-        "TRANSPORT": "stdio",
-        "DATABASE_URL": "postgresql://readonly_user:password@localhost:5432/prod",
-        "NODE_ENV": "development",
-        "LOG_LEVEL": "info"
-      }
-    }
-  }
-}
-```
-
-Once connected, your AI assistant can use Qora to explore and query your database.
-
-## Use Qora over the web
-
-Qora can also run as an HTTP-based MCP server.
-
-With env vars already loaded:
-
-```bash
-TRANSPORT=http pnpm start
-```
-
-Your MCP endpoint will be available at:
-
-```text
-http://your-host:8080/mcp
-```
-
-For a quick private tunnel during development:
-
-```bash
-ngrok http 8080
-```
-
-> **Important:** Don't expose your database or Qora endpoint publicly without appropriate authentication and network controls.
-
-## Run with Docker
-
-The production image runs **Qora only**. It does not start Postgres and does not load [`seed.sql`](./seed.sql) — point it at your own database.
-
-Create a `.env` (Compose reads it for substitution):
-
-```env
-DATABASE_URL=postgresql://readonly_user:password@your-db-host:5432/your_db
-NODE_ENV=production
-TRANSPORT=http
-HOST=0.0.0.0
-PORT=8080
-ALLOWED_HOSTS=localhost,127.0.0.1,your.hostname
-LOG_LEVEL=info
-```
-
-```bash
-docker compose up --build
-```
-
-MCP endpoint: `http://localhost:8080/mcp` (or your host/port).
-
-In production HTTP mode `ALLOWED_HOSTS` must be an explicit list (not `*`).
-
-```bash
-docker compose down
-```
-
-## Dev Container (local testing)
-
-For development with a **sample** database, use the Dev Container. It starts Postgres, applies [`seed.sql`](./seed.sql) once on first volume create, and mounts the repo.
-
-In Cursor / VS Code: **Dev Containers: Reopen in Container**.
-
-Or from the CLI:
-
-```bash
-docker compose -f .devcontainer/docker-compose.yml up -d
-```
-
-Inside the container:
-
-```bash
-pnpm install
-pnpm dev
-```
-
-`DATABASE_URL` is already set to the seeded `analyst_agent` role on service `db`.
-
-Reset the sample DB volume:
-
-```bash
-docker compose -f .devcontainer/docker-compose.yml down -v
-```
-
-## What Qora gives your AI assistant
-
-| Tool             | What it does                          |
-| ---------------- | ------------------------------------- |
-| `list_schemas`   | See the main areas of your data       |
-| `list_tables`    | See what tables exist                 |
-| `describe_table` | Understand what's inside a table      |
-| `run_query`      | Ask the database a read-only question |
-
-The AI can combine these tools to first understand your database and then find the information it needs.
-
-## Configuration
-
-Before starting Qora, expose the variables from [`.env.example`](./.env.example). Required and optional settings:
-
-| Setting         | Description                                                  |
-| --------------- | ------------------------------------------------------------ |
-| `DATABASE_URL`  | PostgreSQL connection string. Use a read-only database user. |
-| `TRANSPORT`     | `stdio` for local AI apps or `http` for web access           |
-| `NODE_ENV`      | `development`, `production`, or `test`                       |
-| `ALLOWED_HOSTS` | Hosts allowed to access the HTTP endpoint                    |
-| `LOG_LEVEL`     | Logging level                                                |
-| `LOG_PRETTY`    | Make logs easier to read locally                             |
-
-## Development
-
-| Command      | Description                 |
-| ------------ | --------------------------- |
-| `pnpm dev`   | Start Qora with auto-reload |
-| `pnpm build` | Build for production        |
-| `pnpm start` | Run the production build    |
-| `pnpm fmt`   | Format the code             |
-| `pnpm lint`  | Check the code              |
+- **[Setup](./SETUP.md)** - install, env, MCP clients, HTTP, Docker
+- **[Contributing](./CONTRIBUTING.md)** - Dev Container, scripts, PR checklist
