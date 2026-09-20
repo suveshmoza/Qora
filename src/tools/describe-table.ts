@@ -1,7 +1,8 @@
 import type { McpServer } from '@modelcontextprotocol/sdk/server/mcp.js';
 import { z } from 'zod';
 
-import { pool } from '../db.js';
+import { describeTable } from '../query/describe-table.js';
+import { formatColumns } from '../query/format-columns.js';
 
 export function registerDescribeTable(server: McpServer): void {
   server.registerTool(
@@ -16,34 +17,15 @@ export function registerDescribeTable(server: McpServer): void {
       }),
     },
     async ({ schema, table_name }) => {
-      const result = await pool.query<{
-        column_name: string;
-        data_type: string;
-        is_nullable: string;
-      }>(
-        `SELECT column_name, data_type, is_nullable
-         FROM information_schema.columns
-         WHERE table_schema = $1 AND table_name = $2
-         ORDER BY ordinal_position`,
-        [schema, table_name],
-      );
-      if (result.rows.length === 0) {
-        return {
-          content: [
-            {
-              type: 'text',
-              text: `Table '${schema}.${table_name}' not found (or not visible to this role).`,
-            },
-          ],
-        };
-      }
-      const lines = [`Columns of ${schema}.${table_name}:`];
-      for (const r of result.rows) {
-        lines.push(
-          `- ${r.column_name} — ${r.data_type}${r.is_nullable === 'YES' ? '' : ' (NOT NULL)'}`,
-        );
-      }
-      return { content: [{ type: 'text', text: lines.join('\n') }] };
+      const columns = await describeTable(schema, table_name);
+      return {
+        content: [
+          {
+            type: 'text',
+            text: formatColumns(columns, schema, table_name),
+          },
+        ],
+      };
     },
   );
 }
