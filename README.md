@@ -4,9 +4,11 @@
   </picture>
 
   <h1>Qora</h1>
+  
   </div>
 
 **Talk to your data. Get clear answers, insights, and analysis.**
+
 
 Qora lets AI assistants like Cursor and Claude safely explore your database and answer questions about your data in plain English.
 
@@ -21,6 +23,8 @@ Ask things like:
 Qora looks up the answers directly from your database and gives them back to your AI assistant.
 
 **Qora is read-only by design.** It can inspect and query your data, but it cannot insert, update, or delete anything.
+
+[![M8ven Score](https://m8ven.ai/badge/mcp/suveshmoza-qora-11gkax)](https://m8ven.ai/mcp/suveshmoza-qora-11gkax)
 
 ## How it works
 
