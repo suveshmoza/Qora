@@ -2,7 +2,6 @@ import { createMcpExpressApp } from '@modelcontextprotocol/sdk/server/express.js
 import { McpServer } from '@modelcontextprotocol/sdk/server/mcp.js';
 import { StdioServerTransport } from '@modelcontextprotocol/sdk/server/stdio.js';
 import { StreamableHTTPServerTransport } from '@modelcontextprotocol/sdk/server/streamableHttp.js';
-import type { Transport } from '@modelcontextprotocol/sdk/shared/transport.js';
 import type { Request, Response } from 'express';
 
 import { env } from './config/env.js';
@@ -28,14 +27,6 @@ function createServer(): McpServer {
   return server;
 }
 
-/**
- * StreamableHTTPServerTransport getters return `T | undefined`, which conflicts with
- * Transport's optional callbacks under exactOptionalPropertyTypes.
- */
-function asTransport(transport: StreamableHTTPServerTransport): Transport {
-  return transport as Transport;
-}
-
 async function startStdio(): Promise<void> {
   const server = createServer();
   const transport = new StdioServerTransport();
@@ -58,7 +49,7 @@ async function startHttp(): Promise<void> {
     const server = createServer();
     try {
       const transport = new StreamableHTTPServerTransport({});
-      await server.connect(asTransport(transport));
+      await server.connect(transport);
       await transport.handleRequest(req, res, req.body);
       res.on('close', () => {
         void transport.close();
