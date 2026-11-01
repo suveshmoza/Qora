@@ -1,6 +1,6 @@
 # syntax=docker/dockerfile:1
 
-FROM node:current-bookworm-slim AS base
+FROM node:26.13.0-bookworm-slim AS base
 RUN npm install -g pnpm@11.25.0
 WORKDIR /app
 
@@ -15,7 +15,7 @@ COPY package.json pnpm-lock.yaml tsconfig.json ./
 COPY src ./src
 RUN pnpm build && pnpm prune --prod
 
-FROM node:current-bookworm-slim AS app
+FROM node:26.13.0-bookworm-slim AS app
 WORKDIR /app
 ENV NODE_ENV=production
 RUN groupadd --system --gid 1001 qora \
