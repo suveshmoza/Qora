@@ -21,7 +21,7 @@ describe('createLogger', () => {
     });
 
     expect(logger).toBeDefined();
-    expect(logger.child).toBeTypeOf('function');
-    expect(logger.info).toBeTypeOf('function');
+    expect(typeof logger.child).toBe('function');
+    expect(typeof logger.info).toBe('function');
   });
 });
